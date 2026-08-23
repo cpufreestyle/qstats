@@ -28,6 +28,9 @@ internal class Popup: PopupWrapper {
     private var wiredField: NSTextField? = nil
     private var compressedField: NSTextField? = nil
     private var swapField: NSTextField? = nil
+
+    private var optimizeButton: NSButton? = nil
+    private var optimizeStatusField: NSTextField? = nil
     
     private var appColorView: NSView? = nil
     private var wiredColorView: NSView? = nil
@@ -215,11 +218,47 @@ internal class Popup: PopupWrapper {
         (self.compressedColorView, _, self.compressedField) = popupWithColorRow(container, color: self.compressedColor, title: "\(localizedString("Compressed")):", value: "")
         (self.freeColorView, _, self.freeField) = popupWithColorRow(container, color: self.freeColor.withAlphaComponent(0.5), title: "\(localizedString("Free")):", value: "")
         self.swapField = popupRow(container, title: "\(localizedString("Swap")):", value: "").1
+        container.addArrangedSubview(self.initOptimizer())
         
         view.addSubview(separator)
         view.addSubview(container)
         
         return view
+    }
+
+    private func initOptimizer() -> NSView {
+        let view = NSStackView()
+        view.orientation = .horizontal
+        view.spacing = 8
+        view.distribution = .fillProportionally
+
+        let button = NSButton(title: localizedString("Optimize now"), target: self, action: #selector(self.optimizeNow))
+        button.bezelStyle = .rounded
+        button.controlSize = .small
+        self.optimizeButton = button
+
+        let status = NSTextField(labelWithString: "")
+        status.font = NSFont.systemFont(ofSize: 11, weight: .regular)
+        status.textColor = .secondaryLabelColor
+        status.lineBreakMode = .byTruncatingTail
+        self.optimizeStatusField = status
+
+        view.addArrangedSubview(button)
+        view.addArrangedSubview(status)
+        return view
+    }
+
+    @objc private func optimizeNow() {
+        self.optimizeButton?.isEnabled = false
+        self.optimizeStatusField?.stringValue = localizedString("Optimizing…")
+        let threshold = Store.shared.int(key: "RAM_autoPurgeThreshold", defaultValue: 80)
+        let systemPurge = Store.shared.bool(key: "RAM_autoPurgeSystemPurge", defaultValue: false)
+        AutoPurgeManager.shared.runOnce(thresholdPercent: threshold, useSystemPurge: systemPurge)
+        // Reflect the result after a short delay so the published state is updated.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            self?.optimizeButton?.isEnabled = true
+            self?.optimizeStatusField?.stringValue = AutoPurgeManager.shared.statusMessage
+        }
     }
     
     private func initProcesses() -> NSView  {

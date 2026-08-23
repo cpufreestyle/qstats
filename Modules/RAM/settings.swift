@@ -50,7 +50,13 @@ internal class Settings: NSStackView, Settings_v, NSTextFieldDelegate {
     private var notificationLevel: String = "Disabled"
     private var textValue: String = "$mem.used/$mem.total ($pressure.value)"
     private var combinedProcessesState: Bool = false
-    
+
+    // Memory optimizer settings (new)
+    private var autoPurgeEnabled: Bool = false
+    private var autoPurgeThreshold: Int = 80
+    private var autoPurgeInterval: Int = 30
+    private var autoPurgeSystemPurge: Bool = false
+
     private let title: String
     
     public var callback: (() -> Void) = {}
@@ -69,7 +75,11 @@ internal class Settings: NSStackView, Settings_v, NSTextFieldDelegate {
         self.notificationLevel = Store.shared.string(key: "\(self.title)_notificationLevel", defaultValue: self.notificationLevel)
         self.textValue = Store.shared.string(key: "\(self.title)_textWidgetValue", defaultValue: self.textValue)
         self.combinedProcessesState = Store.shared.bool(key: "\(self.title)_combinedProcesses", defaultValue: self.combinedProcessesState)
-        
+        self.autoPurgeEnabled = Store.shared.bool(key: "RAM_autoPurge", defaultValue: self.autoPurgeEnabled)
+        self.autoPurgeThreshold = Store.shared.int(key: "RAM_autoPurgeThreshold", defaultValue: self.autoPurgeThreshold)
+        self.autoPurgeInterval = Store.shared.int(key: "RAM_autoPurgeInterval", defaultValue: self.autoPurgeInterval)
+        self.autoPurgeSystemPurge = Store.shared.bool(key: "RAM_autoPurgeSystemPurge", defaultValue: self.autoPurgeSystemPurge)
+
         super.init(frame: NSRect.zero)
         
         self.orientation = .vertical
@@ -125,6 +135,64 @@ internal class Settings: NSStackView, Settings_v, NSTextFieldDelegate {
                     self?.textWidgetHelpPanel.show()
                 }
             ]))
+        }
+
+        self.addArrangedSubview(PreferencesSection([
+            PreferencesRow("Memory optimizer", component: switchView(
+                action: #selector(toggleAutoPurge),
+                state: self.autoPurgeEnabled
+            ))
+        ]))
+
+        if self.autoPurgeEnabled {
+            self.addArrangedSubview(PreferencesSection([
+                PreferencesRow("Reclaim when used memory exceeds \(self.autoPurgeThreshold)%", component: self.thresholdSlider),
+                PreferencesRow("Check interval", component: selectView(
+                    action: #selector(changeAutoPurgeInterval),
+                    items: [5, 15, 30, 60].map { KeyValue_t(key: "\($0)", value: "\($0) min") },
+                    selected: "\(self.autoPurgeInterval)"
+                )),
+                PreferencesRow("Use system 'purge' (needs passwordless sudo)", component: switchView(
+                    action: #selector(toggleAutoPurgeSystemPurge),
+                    state: self.autoPurgeSystemPurge
+                ))
+            ]))
+        }
+    }
+
+    private var thresholdSlider: NSView {
+        let slider = NSSlider(value: Double(self.autoPurgeThreshold), minValue: 50, maxValue: 95, target: self, action: #selector(changeAutoPurgeThreshold(_:)))
+        slider.numberOfTickMarks = 46
+        slider.allowsTickMarkValuesOnly = false
+        slider.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        return slider
+    }
+
+    @objc private func changeAutoPurgeThreshold(_ sender: NSSlider) {
+        self.autoPurgeThreshold = Int(sender.doubleValue)
+        Store.shared.set(key: "RAM_autoPurgeThreshold", value: self.autoPurgeThreshold)
+        AutoPurgeManager.shared.start(intervalMinutes: self.autoPurgeInterval, thresholdPercent: self.autoPurgeThreshold, useSystemPurge: self.autoPurgeSystemPurge)
+    }
+    @objc private func changeAutoPurgeInterval(_ sender: NSMenuItem) {
+        guard let value = Int(sender.title.replacingOccurrences(of: " min", with: "")) else { return }
+        self.autoPurgeInterval = value
+        Store.shared.set(key: "RAM_autoPurgeInterval", value: value)
+        AutoPurgeManager.shared.start(intervalMinutes: self.autoPurgeInterval, thresholdPercent: self.autoPurgeThreshold, useSystemPurge: self.autoPurgeSystemPurge)
+    }
+    @objc private func toggleAutoPurge(_ sender: NSControl) {
+        self.autoPurgeEnabled = controlState(sender)
+        Store.shared.set(key: "RAM_autoPurge", value: self.autoPurgeEnabled)
+        if self.autoPurgeEnabled {
+            AutoPurgeManager.shared.start(intervalMinutes: self.autoPurgeInterval, thresholdPercent: self.autoPurgeThreshold, useSystemPurge: self.autoPurgeSystemPurge)
+        } else {
+            AutoPurgeManager.shared.stop()
+        }
+    }
+    @objc private func toggleAutoPurgeSystemPurge(_ sender: NSControl) {
+        self.autoPurgeSystemPurge = controlState(sender)
+        Store.shared.set(key: "RAM_autoPurgeSystemPurge", value: self.autoPurgeSystemPurge)
+        if self.autoPurgeEnabled {
+            AutoPurgeManager.shared.start(intervalMinutes: self.autoPurgeInterval, thresholdPercent: self.autoPurgeThreshold, useSystemPurge: self.autoPurgeSystemPurge)
         }
     }
     

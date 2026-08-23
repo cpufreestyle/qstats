@@ -172,6 +172,8 @@
 		9A81C75E2449A41400825D92 /* RAM.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9A81C7562449A41400825D92 /* RAM.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9A81C7692449A43600825D92 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A81C7672449A43600825D92 /* main.swift */; };
 		9A81C76A2449A43600825D92 /* readers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A81C7682449A43600825D92 /* readers.swift */; };
+		C0DE0003A1B2C3D4E5F6A81C /* MemoryPurge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0001A1B2C3D4E5F6A81C /* MemoryPurge.swift */; };
+		C0DE0004A1B2C3D4E5F6A81C /* AutoPurgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0002A1B2C3D4E5F6A81C /* AutoPurgeManager.swift */; };
 		9A83526F2889A03100791BAC /* Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A83526E2889A03100791BAC /* Setup.swift */; };
 		9A8B923D2696445C00FD6D83 /* settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8B923C2696445C00FD6D83 /* settings.swift */; };
 		9A90E19024EAD2BB00471E9A /* GPU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A90E18924EAD2BB00471E9A /* GPU.framework */; };
@@ -716,6 +718,8 @@
 		9A81C7592449A41400825D92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A81C7672449A43600825D92 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9A81C7682449A43600825D92 /* readers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = readers.swift; sourceTree = "<group>"; };
+		C0DE0001A1B2C3D4E5F6A81C /* MemoryPurge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPurge.swift; sourceTree = "<group>"; };
+		C0DE0002A1B2C3D4E5F6A81C /* AutoPurgeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoPurgeManager.swift; sourceTree = "<group>"; };
 		9A83526E2889A03100791BAC /* Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setup.swift; sourceTree = "<group>"; };
 		9A8B923C2696445C00FD6D83 /* settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settings.swift; sourceTree = "<group>"; };
 		9A90E18924EAD2BB00471E9A /* GPU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GPU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1232,6 +1236,8 @@
 			children = (
 				9A81C7672449A43600825D92 /* main.swift */,
 				9A81C7682449A43600825D92 /* readers.swift */,
+				C0DE0001A1B2C3D4E5F6A81C /* MemoryPurge.swift */,
+				C0DE0002A1B2C3D4E5F6A81C /* AutoPurgeManager.swift */,
 				9AA6425F244B274200416A33 /* popup.swift */,
 				5C23BC0729A03D1200DBA990 /* portal.swift */,
 				9A953A1324B9D22D0038EF4B /* settings.swift */,
@@ -2313,6 +2319,8 @@
 			files = (
 				5CB3878A2C35A7110030459D /* widget.swift in Sources */,
 				9A81C76A2449A43600825D92 /* readers.swift in Sources */,
+				C0DE0003A1B2C3D4E5F6A81C /* MemoryPurge.swift in Sources */,
+				C0DE0004A1B2C3D4E5F6A81C /* AutoPurgeManager.swift in Sources */,
 				5C2F5C442F8409F700B3F8AC /* preview.swift in Sources */,
 				9AA64260244B274200416A33 /* popup.swift in Sources */,
 				5C23BC0829A03D1200DBA990 /* portal.swift in Sources */,

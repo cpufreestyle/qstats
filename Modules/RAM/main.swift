@@ -145,6 +145,14 @@ public class RAM: Module {
         }
         
         self.setReaders([self.usageReader, self.processReader])
+
+        // Start the memory optimizer if the user enabled it previously.
+        if Store.shared.bool(key: "RAM_autoPurge", defaultValue: false) {
+            let interval = Store.shared.int(key: "RAM_autoPurgeInterval", defaultValue: 30)
+            let threshold = Store.shared.int(key: "RAM_autoPurgeThreshold", defaultValue: 80)
+            let systemPurge = Store.shared.bool(key: "RAM_autoPurgeSystemPurge", defaultValue: false)
+            AutoPurgeManager.shared.start(intervalMinutes: interval, thresholdPercent: threshold, useSystemPurge: systemPurge)
+        }
     }
     
     private func loadCallback(_ raw: RAM_Usage?) {
