@@ -30,7 +30,7 @@ internal class UpdateWindow: NSWindow, NSWindowDelegate {
             defer: true
         )
         
-        self.title = "Stats"
+        self.title = "qstats"
         self.contentViewController = self.viewController
         self.titlebarAppearsTransparent = true
         self.isReleasedWhenClosed = false

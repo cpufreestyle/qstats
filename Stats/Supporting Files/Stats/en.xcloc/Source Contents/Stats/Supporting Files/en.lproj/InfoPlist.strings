@@ -1,4 +1,4 @@
 /* Bundle name */
-"CFBundleName" = "Stats";
+"CFBundleName" = "qstats";
 /* Copyright (human-readable) */
 "NSHumanReadableCopyright" = "Copyright © 2020 Serhiy Mytrovtsiy. All rights reserved.";
