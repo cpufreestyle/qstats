@@ -23,10 +23,10 @@ LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchSe
 trap 'rm -rf "$WORK"' EXIT
 mkdir -p "$ARCHIVE"
 
-# 已构建应用：优先 Debug，其次 Release；可用 QSTATS_APP 覆盖
+# 已安装应用优先，与 Dock 保持同一份；可用 QSTATS_APP 覆盖
 TARGET="$QSTATS_APP"
 if [ -z "$TARGET" ]; then
-  for cand in "$DIR/build/Debug/Stats.app" "$DIR/build/Release/Stats.app"; do
+  for cand in "/Applications/Stats.app" "$DIR/build/Debug/Stats.app" "$DIR/build/Release/Stats.app"; do
     if [ -d "$cand" ]; then TARGET="$cand"; break; fi
   done
 fi
