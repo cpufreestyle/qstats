@@ -146,6 +146,7 @@
 "No notifications available in this module" = "Não há notificações disponíveis neste módulo"; // gemma4:31b
 "Open Calendar" = "Abrir calendário"; // gemma4:31b
 "Toggle the module" = "Alternar o módulo"; // gemma4:31b
+"Preview is unavailable while module is disabled." = "A pré-visualização não está disponível enquanto o módulo estiver desativado.";
 "Open System Stats" = "Abrir System Stats"; // gemma4:31b
 "Close module settings" = "Fechar definições do módulo"; // qwen3.8:27b
 
@@ -556,6 +557,7 @@
 "Identificator" = "Identificador"; // qwen3.8:27b
 "Plan" = "Plano"; // qwen3.8:27b
 "Monitoring" = "Monitorização"; // qwen3.8:27b
+"Modules" = "Módulos";
 "Control" = "Controlo"; // qwen3.8:27b
 "Update" = "Atualizar"; // qwen3.8:27b
 "Sign in" = "Iniciar sessão"; // qwen3.8:27b

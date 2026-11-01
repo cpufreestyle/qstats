@@ -108,10 +108,7 @@ extension AppDelegate {
             LaunchAtLogin.migrate()
         }
         
-        if Store.shared.exist(key: "dockIcon") {
-            let dockIconStatus = Store.shared.bool(key: "dockIcon", defaultValue: false) ? NSApplication.ActivationPolicy.regular : NSApplication.ActivationPolicy.accessory
-            NSApp.setActivationPolicy(dockIconStatus)
-        }
+        self.updateDockIcon()
         
         self.checkIfShouldShowSupportWindow()
         self.supportActivity.interval = 60 * 60 * 24 * 30
@@ -340,6 +337,8 @@ extension AppDelegate {
     
     internal func icon() {
         if self.pauseState {
+            guard self.menuBarItem == nil else { return }
+            
             self.menuBarItem = NSStatusBar.system.statusItem(withLength: AppIcon.size.width)
             DispatchQueue.main.async(execute: {
                 self.menuBarItem?.autosaveName = "Stats"

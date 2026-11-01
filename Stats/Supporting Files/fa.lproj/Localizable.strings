@@ -146,6 +146,7 @@
 "No notifications available in this module" = "در این ماژول هیچ اعلانی موجود نیست"; // gemma4:31b
 "Open Calendar" = "باز کردن تقویم"; // translategemma:4b
 "Toggle the module" = "تغییر وضعیت ماژول"; // gemma4:31b
+"Preview is unavailable while module is disabled." = "تا زمانی که ماژول غیرفعال است، پیش‌نمایش در دسترس نیست.";
 "Open System Stats" = "باز کردن System Stats"; // gemma4:31b
 "Close module settings" = "بستن تنظیمات ماژول"; // qwen3.8:27b
 
@@ -556,6 +557,7 @@
 "Identificator" = "شناسه"; // qwen3.8:27b
 "Plan" = "برنامه"; // qwen3.8:27b
 "Monitoring" = "پایش"; // qwen3.8:27b
+"Modules" = "ماژول‌ها";
 "Control" = "کنترل"; // qwen3.8:27b
 "Update" = "به‌روزرسانی"; // qwen3.8:27b
 "Sign in" = "ورود"; // qwen3.8:27b

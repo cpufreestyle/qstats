@@ -146,6 +146,7 @@
 "No notifications available in this module" = "Bu modülde kullanılabilir bildirim yok";
 "Open Calendar" = "Takvimi aç";
 "Toggle the module" = "Modülü aç/kapat";
+"Preview is unavailable while module is disabled." = "Modül devre dışıyken önizleme kullanılamaz.";
 "Open System Stats" = "System Stats'ı aç"; // gemma4:31b
 "Close module settings" = "Modül ayarlarını kapat"; // qwen3.8:27b
 
@@ -556,6 +557,7 @@
 "Identificator" = "Kimlik"; // qwen3.8:27b
 "Plan" = "Plan";
 "Monitoring" = "İzleme"; // qwen3.8:27b
+"Modules" = "Modüller";
 "Control" = "Kontrol"; // qwen3.8:27b
 "Update" = "Güncelle"; // qwen3.8:27b
 "Sign in" = "Oturum aç"; // qwen3.8:27b
