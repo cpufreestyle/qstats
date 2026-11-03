@@ -619,35 +619,7 @@ private class SetupView_end: NSStackView {
         message.toolTip = localizedString("finish_setup_message")
         message.isSelectable = false
         
-        let support: NSStackView = NSStackView(frame: NSRect(x: 0, y: 0, width: 160, height: 50))
-        support.edgeInsets = NSEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
-        support.spacing = 12
-        support.orientation = .horizontal
-        
-        let systemStats = SupportButtonView(name: "System Stats", image: "Stats", action: {
-            NSWorkspace.shared.open(URL(string: "https://www.system-stats.com")!)
-        })
-        let github = SupportButtonView(name: "GitHub Sponsors", image: "github", action: {
-            NSWorkspace.shared.open(URL(string: "https://github.com/sponsors/exelban")!)
-        })
-        let paypal = SupportButtonView(name: "PayPal", image: "paypal", action: {
-            NSWorkspace.shared.open(URL(string: "https://www.paypal.com/donate?hosted_button_id=3DS5JHDBATMTC")!)
-        })
-        let koFi = SupportButtonView(name: "Ko-fi", image: "ko-fi", action: {
-            NSWorkspace.shared.open(URL(string: "https://ko-fi.com/exelban")!)
-        })
-        let patreon = SupportButtonView(name: "Patreon", image: "patreon", action: {
-            NSWorkspace.shared.open(URL(string: "https://patreon.com/exelban")!)
-        })
-        
-        support.addArrangedSubview(systemStats)
-        support.addArrangedSubview(github)
-        support.addArrangedSubview(paypal)
-        support.addArrangedSubview(koFi)
-        support.addArrangedSubview(patreon)
-        
         content.addArrangedSubview(message)
-        content.addArrangedSubview(support)
         
         container.addRow(with: [title])
         container.addRow(with: [content])
