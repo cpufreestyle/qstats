@@ -87,11 +87,22 @@ if [ ! -f "$BACKUP_DIR/AppIcon.orig.icns" ] && [ -f "$RESOURCES/AppIcon.icns" ];
 fi
 
 # 3. 复制新图标资源
+if [ -f "$RESOURCES/Assets.car" ] \
+   && cmp -s "$ASSETS_CAR" "$RESOURCES/Assets.car" \
+   && cmp -s "$APPICON_ICNS" "$RESOURCES/AppIcon.icns"; then
+  echo "==> 目标应用已内置紫底白 'q' 图标，无需注入，跳过重新签名。"
+  echo "==> 完成！"
+  exit 0
+fi
+
 echo "==> 写入 Assets.car 与 AppIcon.icns..."
 cp "$ASSETS_CAR" "$RESOURCES/Assets.car"
 cp "$APPICON_ICNS" "$RESOURCES/AppIcon.icns"
 
 # 4. Ad-hoc 重新签名
+echo "注意：重新签名会改变代码签名标识，若应用曾在钥匙串保存凭据"
+echo "      （如 SystemStats 登录令牌），下次启动会弹出钥匙串授权框，"
+echo "      需要输入登录钥匙串密码并选择「始终允许」。"
 echo "==> 重新 ad-hoc 代码签名..."
 codesign --force --deep --sign - "$TARGET" >/dev/null 2>&1 || {
   echo "警告：codesign 签名失败，可能需要提权或手动签名" >&2

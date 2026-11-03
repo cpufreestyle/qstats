@@ -94,6 +94,15 @@ if [ "$MODE" = "merge" ]; then
       git checkout --ours -- "Stats/Supporting Files/Assets.xcassets/AppIcon.appiconset" 2>/dev/null || true
       git add "Stats/Supporting Files/Assets.xcassets/AppIcon.appiconset" 2>/dev/null || true
     fi
+    # 上游可能删除 Contents.json（非冲突，会被静默合并掉），缺失会导致
+    # NSImage(named: "AppIcon") 返回 nil 并在“关于”面板强解包崩溃，这里强制补回。
+    APPICON_JSON="Stats/Supporting Files/Assets.xcassets/AppIcon.appiconset/Contents.json"
+    if [ ! -f "$APPICON_JSON" ]; then
+      echo "    补回被上游删除的 $APPICON_JSON ..."
+      git show "HEAD~1:$APPICON_JSON" > "$APPICON_JSON" 2>/dev/null \
+        || git show "de8622ce~1:$APPICON_JSON" > "$APPICON_JSON" 2>/dev/null || true
+      git add "$APPICON_JSON" 2>/dev/null || true
+    fi
     # 确保 project.pbxproj 中保持 AppIcon 配置
     if [ -f "Stats.xcodeproj/project.pbxproj" ]; then
       sed -i "" "s/ASSETCATALOG_COMPILER_APPICON_NAME = Stats;/ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;/g" Stats.xcodeproj/project.pbxproj 2>/dev/null || true
@@ -112,6 +121,18 @@ if [ "$MODE" = "merge" ]; then
 elif [ "$MODE" = "rebase" ]; then
   echo "==> 开始变基当前分支到 $REMOTE_UPSTREAM/$BRANCH_UPSTREAM..."
   git rebase "$REMOTE_UPSTREAM/$BRANCH_UPSTREAM"
+fi
+
+# 无论合并是否产生冲突，都确保 AppIcon 定义文件存在：
+# 上游删除 Contents.json 属于非冲突改动，会被静默合并掉，导致
+# NSImage(named: "AppIcon") 返回 nil 并在“关于”面板强解包崩溃。
+APPICON_JSON="Stats/Supporting Files/Assets.xcassets/AppIcon.appiconset/Contents.json"
+if [ ! -f "$APPICON_JSON" ]; then
+  echo "==> 补回缺失的 $APPICON_JSON ..."
+  git show "HEAD~1:$APPICON_JSON" > "$APPICON_JSON" 2>/dev/null \
+    || git show "de8622ce~1:$APPICON_JSON" > "$APPICON_JSON" 2>/dev/null || true
+  git add "$APPICON_JSON" 2>/dev/null || true
+  git commit -m "Restore AppIcon Contents.json deleted by upstream" --no-edit >/dev/null 2>&1 || true
 fi
 
 # 验证与图标保护
