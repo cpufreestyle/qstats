@@ -76,6 +76,9 @@ public class SystemStats {
     public var auth: RemoteAuth = RemoteAuth()
     public var plan: AccountPlan?
     
+    private var remoteEnabled: Bool {
+        Store.shared.bool(key: "Remote_state", defaultValue: false)
+    }
     private let log: NextLog
     private var mqtt: MQTTManager = MQTTManager()
     public let session: URLSession = {
@@ -155,17 +158,19 @@ public class SystemStats {
             self.logout()
         }
         
-        if self.auth.hasCredentials() {
+        if self.remoteEnabled, self.auth.hasCredentials() {
             info("Found auth credentials for remote monitoring, starting Remote...", log: self.log)
             self.start()
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.successLogin), name: .remoteLoginSuccess, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleModuleToggle(_:)), name: .toggleModule, object: nil)
     }
     
     deinit {
         self.mqtt.disconnect()
         NotificationCenter.default.removeObserver(self, name: .remoteLoginSuccess, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .toggleModule, object: nil)
     }
     
     public func login() {
@@ -239,6 +244,20 @@ public class SystemStats {
         NotificationCenter.default.post(name: .remoteState, object: nil, userInfo: ["auth": self.isAuthorized])
         self.mqtt.connect()
         debug("Login successfully on Stats Remote", log: self.log)
+    }
+    
+    @objc private func handleModuleToggle(_ notification: Notification) {
+        guard let module = notification.userInfo?["module"] as? String, module == "Remote",
+              let enabled = notification.userInfo?["state"] as? Bool else { return }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if enabled, self.remoteEnabled, self.auth.hasCredentials() {
+                self.start()
+            } else if !enabled {
+                self.stop()
+            }
+        }
     }
     
     public func start() {
@@ -399,7 +418,6 @@ public class SystemStats {
                let account = try? JSONDecoder().decode(AccountResponse.self, from: data) {
                 SystemStats.shared.plan = account.plan
                 debug("Remote plan: \(account.plan.rawValue)", log: self.log)
-                NotificationCenter.default.post(name: .remoteAuthenticated, object: nil)
             } else {
                 let bodyString = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
                 debug("Fetch account failed (\(httpResponse.statusCode)): \(bodyString)", log: self.log)
@@ -653,7 +671,7 @@ public class RemoteAuth {
     public func hasCredentials() -> Bool {
         self.credentialLock.lock()
         defer { self.credentialLock.unlock() }
-        return !self.accessToken.isEmpty && !self.refreshToken.isEmpty
+        return RemoteKeychain.exists("access_token") && RemoteKeychain.exists("refresh_token")
     }
     
     public func login(completion: @escaping (URL?) -> Void) {
@@ -1499,6 +1517,16 @@ enum RemoteKeychain {
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         guard status == errSecSuccess, let data = item as? Data else { return nil }
         return String(data: data, encoding: .utf8)
+    }
+    
+    static func exists(_ key: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecUseAuthenticationUI as String: kSecUseAuthenticationUIFail
+        ]
+        return SecItemCopyMatching(query as CFDictionary, nil) == errSecSuccess
     }
     
     static func write(_ value: String, for key: String) {

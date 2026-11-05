@@ -196,7 +196,7 @@ private class SetupView_welcome: NSStackView {
         title.toolTip = localizedString("Welcome to Stats")
         title.isSelectable = false
         
-        let icon: NSImageView = NSImageView(image: NSImage(named: NSImage.Name("Stats"))!)
+        let icon = NSImageView(image: NSApp.applicationIconImage ?? iconFromSymbol(name: "chart.bar.fill", scale: .large))
         icon.heightAnchor.constraint(equalToConstant: 120).isActive = true
         
         let message: NSTextField = TextView()

@@ -212,9 +212,6 @@ extension AppDelegate {
         }
     }
     
-    public func checkIfShouldShowSupportWindow() {}
-    public func tryToShowSupportWindow(interaction: Bool = false) {}
-    
     private func showUpdateNotification(version: version_s) {
         debug("show update notification")
         _ = showNotification(
