@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # ============================================================
-# make_desktop_shortcut.sh — 生成/刷新桌面快捷方式 qstats
+# make_desktop_shortcut.sh — 生成/刷新桌面唯一快捷方式 qstats.app
 #
 # 产物：
 #   1) ~/Desktop/qstats.app   可双击启动的 .app 包裹器（统一紫底白 "q" 图标）
-#   2) ~/Desktop/qstats       Finder 替身（别名）指向仓库（使用同一自定义图标）
-#      macOS 不允许给符号链接写自定义图标（setxattr 返回 EPERM），故用替身
+#   2) 历史 ~/Desktop/qstats 替身会被归档移除，避免桌面出现两个图标
+#      macOS 不允许给符号链接写自定义图标，唯一入口继续使用 .app 包裹器
 #   3) 可选同步：--sync-appiconset 更新仓库内的 AppIcon.appiconset (10 个规格 PNG)
 #   4) 可选应用：--apply-app 自动调用 scripts/apply_app_icon.sh 注入已安装 Stats
 #
@@ -365,35 +365,24 @@ codesign --force --sign - "$APP" >/dev/null 2>&1 || true
 
 # ---------------------------------------------------------------- 落桌：.app
 DEST="$DESKTOP/$APP_NAME.app"
+LINK="$DESKTOP/$APP_NAME"
 if [ -e "$DEST" ] || [ -L "$DEST" ]; then
   mv "$DEST" "$ARCHIVE/" 2>/dev/null || true
   echo "==> 旧 .app 已归档 -> $ARCHIVE/"
 fi
+if [ -e "$LINK" ] || [ -L "$LINK" ]; then
+  mv "$LINK" "$ARCHIVE/qstats.alias" 2>/dev/null || true
+  echo "==> 历史替身已归档 -> $ARCHIVE/qstats.alias"
+fi
 mv "$APP" "$DEST"
-
-# ---------------------------------------------------------------- 落桌：仓库替身
-LINK="$DESKTOP/$APP_NAME"
-if [ -L "$LINK" ]; then
-  mv "$LINK" "$ARCHIVE/qstats.symlink" 2>/dev/null || true
-  echo "==> 旧符号链接已归档 -> $ARCHIVE/qstats.symlink"
-fi
-if [ ! -e "$LINK" ]; then
-  osascript -e "tell application \"Finder\" to make new alias file at (POSIX file \"$DESKTOP\" as alias) to (POSIX file \"$DIR\" as alias) with properties {name:\"$APP_NAME\"}" >/dev/null 2>&1 || true
-fi
-if [ -e "$LINK" ]; then
-  set_custom_icon "$LINK" || echo "警告：未能为 $LINK 设置图标" >&2
-  touch "$LINK"
-fi
 
 touch "$DEST"
 if [ -x "$LSREGISTER" ]; then
   "$LSREGISTER" -f -R -trusted "$DEST" >/dev/null 2>&1 || true
-  "$LSREGISTER" -f -R -trusted "$LINK" >/dev/null 2>&1 || true
 fi
 
 echo "==> 桌面快捷方式已就绪："
 echo "    $DEST  （应用包裹器，双击启动 -> $TARGET）"
-echo "    $LINK  （仓库替身，同一图标）"
 
 # 4. 可选：应用到主 App
 if [ "$APPLY_APP" = "1" ] && [ -f "$DIR/scripts/apply_app_icon.sh" ]; then
