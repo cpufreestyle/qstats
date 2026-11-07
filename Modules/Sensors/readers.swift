@@ -25,6 +25,7 @@ internal class SensorsReader: Reader<Sensors_List> {
         Store.shared.bool(key: "Sensors_hid", defaultValue: false)
     }
     private var unknownSensorsState: Bool
+    private let temperatureCeiling: Double
     
     private var channels: CFMutableDictionary? = nil
     private var subscription: IOReportSubscriptionRef? = nil
@@ -32,6 +33,7 @@ internal class SensorsReader: Reader<Sensors_List> {
     
     init(callback: @escaping (T?) -> Void = {_ in }) {
         self.unknownSensorsState = Store.shared.bool(key: "Sensors_unknown", defaultValue: false)
+        self.temperatureCeiling = SensorsReader.ceiling(for: SystemKit.shared.device.platform)
         super.init(.sensors, callback: callback)
         
         self.channels = self.getChannels()
@@ -126,7 +128,7 @@ internal class SensorsReader: Reader<Sensors_List> {
         
         var results: [Sensor_p] = []
         results += list.filter({ (s: Sensor_p) -> Bool in
-            if s.type == .temperature && (s.value == 0 || s.value > 110) {
+            if s.type == .temperature && (s.value == 0 || s.value > self.temperatureCeiling) {
                 return false
             } else if s.type == .current && s.value > 100 {
                 return false
@@ -154,7 +156,7 @@ internal class SensorsReader: Reader<Sensors_List> {
             
             var newValue = SMC.shared.getValue(sensors[i].key) ?? 0
             if sensors[i].type == .temperature && sensors[i].group == .CPU &&
-                (newValue < 10 || newValue > 120) { // fix for m2 broken sensors
+                (newValue < 10 || newValue > self.temperatureCeiling) {
                 newValue = sensors[i].value
             }
             sensors[i].value = newValue
@@ -329,7 +331,7 @@ internal class SensorsReader: Reader<Sensors_List> {
         return list.filter({ (s: Sensor_p) -> Bool in
             switch s.type {
             case .temperature:
-                return s.value < 110 && s.value >= 0
+                return s.value < self.temperatureCeiling && s.value >= 0
             case .voltage:
                 return s.value < 300 && s.value >= 0
             case .current:
@@ -341,6 +343,14 @@ internal class SensorsReader: Reader<Sensors_List> {
     
     public func unknownCallback() {
         self.unknownSensorsState = Store.shared.bool(key: "Sensors_unknown", defaultValue: false)
+    }
+
+    // M4 and newer Apple Silicon report junction temperatures that legitimately
+    // exceed the historical 110 C cutoff, so those readings were being discarded
+    // and the sensor disappeared from the list until the app restarted.
+    internal static func ceiling(for platform: Platform?) -> Double {
+        guard let platform = platform, platform.generation >= 4 else { return 110 }
+        return 125
     }
 }
 
@@ -502,7 +512,7 @@ extension SensorsReader {
         return list.filter({ (s: Sensor_p) -> Bool in
             switch s.type {
             case .temperature:
-                return s.value < 110 && s.value >= 0
+                return s.value < self.temperatureCeiling && s.value >= 0
             case .voltage:
                 return s.value < 300 && s.value >= 0
             case .current:
