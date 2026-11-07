@@ -435,7 +435,7 @@ private class SidebarView: NSStackView {
     }
     
     @objc private func reportBug() {
-        NSWorkspace.shared.open(URL(string: "https://github.com/exelban/stats/issues/new?template=bug_report.yml")!)
+        NSWorkspace.shared.open(URL(string: "https://github.com/cpufreestyle/qstats/issues/new?template=bug_report.yml")!)
     }
     
     @objc private func closeApp(_ sender: NSButton) {
