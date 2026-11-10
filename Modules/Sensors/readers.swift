@@ -472,7 +472,7 @@ extension SensorsReader {
         return (page, usage, eventType)
     }
     
-    private func initHIDSensors() -> [Sensor] {
+    private func initHIDSensors() -> [Sensor_p] {
         var list: [Sensor] = []
         
         for typ in SensorsReader.HIDtypes {
