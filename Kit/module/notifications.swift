@@ -50,7 +50,7 @@ open class NotificationsWrapper: NSStackView {
     
     public func checkDouble(id rid: String, value: Double, threshold: Double, title: String, subtitle: String, less: Bool = false, consecutive: Int = 2, hysteresis: Double = 0) {
         let id = "Stats_\(self.module)_\(rid)"
-        let recovery = hysteresis > 0 ? threshold - hysteresis : threshold
+        let recovery = less ? threshold + hysteresis : threshold - hysteresis
         let first = less ? value > recovery : value < recovery
         let second = less ? value <= threshold : value >= threshold
 
