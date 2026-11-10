@@ -326,73 +326,71 @@ internal class Preview: PreviewWrapper {
         })
     }
     
-    internal func loadCallback(_ value: CPU_Load) {
-        DispatchQueue.main.async(execute: {
-            if (self.window?.isVisible ?? false) || !self.initialized {
-                self.circle?.toolTip = "\(localizedString("CPU usage")): \(Int(value.totalUsage.rounded(toPlaces: 2) * 100))%"
-                self.circle?.setValue(value.totalUsage)
-                self.circle?.setSegments([
-                    ColorValue(value.systemLoad, color: self.systemColor),
-                    ColorValue(value.userLoad, color: self.userColor)
-                ])
-                self.circle?.setNonActiveSegmentColor(self.idleColor)
-                
-                self.systemField?.stringValue = "\(Int(value.systemLoad.rounded(toPlaces: 2) * 100))%"
-                self.userField?.stringValue = "\(Int(value.userLoad.rounded(toPlaces: 2) * 100))%"
-                self.idleField?.stringValue = "\(Int(value.idleLoad.rounded(toPlaces: 2) * 100))%"
-                
-                self.bar?.setValues([
-                    ColorValue(value.systemLoad, color: self.systemColor),
-                    ColorValue(value.userLoad, color: self.userColor)
-                ])
-                
-                for (i, v) in value.usagePerCore.enumerated() {
-                    if let core = self.cores.first(where: {$0.identifier?.rawValue == "\(i)" }) {
-                        core.setValue(v)
-                    }
-                }
-                
-                self.initialized = true
+    private func renderIfNeeded(_ flag: ReferenceWritableKeyPath<Preview, Bool>, render: @escaping () -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if (self.window?.isVisible ?? false) || !self[keyPath: flag] {
+                render()
+                self[keyPath: flag] = true
             }
-            self.loadLineChart?.addValue(value.totalUsage)
-        })
+        }
+    }
+    
+    internal func loadCallback(_ value: CPU_Load) {
+        self.renderIfNeeded(\.initialized) {
+            self.circle?.toolTip = "\(localizedString("CPU usage")): \(Int(value.totalUsage.rounded(toPlaces: 2) * 100))%"
+            self.circle?.setValue(value.totalUsage)
+            self.circle?.setSegments([
+                ColorValue(value.systemLoad, color: self.systemColor),
+                ColorValue(value.userLoad, color: self.userColor)
+            ])
+            self.circle?.setNonActiveSegmentColor(self.idleColor)
+            
+            self.systemField?.stringValue = "\(Int(value.systemLoad.rounded(toPlaces: 2) * 100))%"
+            self.userField?.stringValue = "\(Int(value.userLoad.rounded(toPlaces: 2) * 100))%"
+            self.idleField?.stringValue = "\(Int(value.idleLoad.rounded(toPlaces: 2) * 100))%"
+            
+            self.bar?.setValues([
+                ColorValue(value.systemLoad, color: self.systemColor),
+                ColorValue(value.userLoad, color: self.userColor)
+            ])
+            
+            for (i, v) in value.usagePerCore.enumerated() {
+                if let core = self.cores.first(where: {$0.identifier?.rawValue == "\(i)" }) {
+                    core.setValue(v)
+                }
+            }
+        }
+        self.loadLineChart?.addValue(value.totalUsage)
     }
     
     public func averageCallback(_ value: CPU_AverageLoad?) {
         guard let value else { return }
         
-        DispatchQueue.main.async(execute: {
-            if (self.window?.isVisible ?? false) || !self.initializedFrequency {
-                self.average1Field?.stringValue = "\(value.load1)"
-                self.average5Field?.stringValue = "\(value.load5)"
-                self.average15Field?.stringValue = "\(value.load15)"
-                
-                self.initializedAverage = true
-            }
-        })
+        self.renderIfNeeded(\.initializedAverage) {
+            self.average1Field?.stringValue = "\(value.load1)"
+            self.average5Field?.stringValue = "\(value.load5)"
+            self.average15Field?.stringValue = "\(value.load15)"
+        }
     }
     
     public func frequencyCallback(_ value: CPU_Frequency?) {
         guard let value else { return }
         
-        DispatchQueue.main.async(execute: {
-            if (self.window?.isVisible ?? false) || !self.initializedFrequency {
-                if let v = value.value {
-                    self.coresFreqField?.stringValue = "\(Int(v)) MHz"
-                }
-                if let v = value.eCore {
-                    self.eCoresFreqField?.stringValue = "\(Int(v)) MHz"
-                }
-                if let v = value.pCore {
-                    self.pCoresFreqField?.stringValue = "\(Int(v)) MHz"
-                }
-                if let v = value.sCore {
-                    self.sCoresFreqField?.stringValue = "\(Int(v)) MHz"
-                }
-                
-                self.initializedFrequency = true
+        self.renderIfNeeded(\.initializedFrequency) {
+            if let v = value.value {
+                self.coresFreqField?.stringValue = "\(Int(v)) MHz"
             }
-        })
+            if let v = value.eCore {
+                self.eCoresFreqField?.stringValue = "\(Int(v)) MHz"
+            }
+            if let v = value.pCore {
+                self.pCoresFreqField?.stringValue = "\(Int(v)) MHz"
+            }
+            if let v = value.sCore {
+                self.sCoresFreqField?.stringValue = "\(Int(v)) MHz"
+            }
+        }
     }
 }
 

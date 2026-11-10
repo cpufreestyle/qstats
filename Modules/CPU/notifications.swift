@@ -169,6 +169,12 @@ class Notifications: NotificationsWrapper {
         }
     }
     
+    internal func frequencyCallback(_ utilization: Double) {
+        let title = localizedString("CPU thermal throttling")
+        let subtitle = "\(localizedString("Frequency utilization")): \(Int(utilization * 100))%"
+        self.checkDouble(id: "frequencyThrottle", value: utilization, threshold: 0.9, title: title, subtitle: subtitle, less: true, consecutive: 3, hysteresis: 0.05)
+    }
+    
     // MARK: - change helpers
     
     @objc private func toggleTotalLoad(_ sender: NSControl) {

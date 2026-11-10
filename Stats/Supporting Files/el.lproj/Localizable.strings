@@ -85,6 +85,7 @@
 "Read" = "Ανάγνωση"; // gemma4:31b
 "Write" = "Εγγραφή"; // gemma4:31b
 "Frequency" = "Συχνότητα"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Αποθήκευση"; // translategemma:4b
 "Run" = "Εκτέλεση"; // gemma4:31b
 "Stop" = "Διακοπή"; // gemma4:31b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Χρήση CPU";
 "CPU temperature" = "Θερμοκρασία CPU";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Συχνότητα CPU";
 "System" = "Σύστημα";
 "User" = "Χρήστης";

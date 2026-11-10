@@ -85,6 +85,7 @@
 "Read" = "Четене"; // gemma4:31b
 "Write" = "Запис"; // gemma4:31b
 "Frequency" = "Честота"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Запази"; // gemma4:31b
 "Run" = "Стартирай"; // translategemma:4b
 "Stop" = "Спри"; // gemma4:31b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Употреба на процесора";
 "CPU temperature" = "Температура на процесора";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Честота на процесора";
 "System" = "Система";
 "User" = "Потребител";

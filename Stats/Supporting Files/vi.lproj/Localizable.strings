@@ -85,6 +85,7 @@
 "Read" = "Đọc";
 "Write" = "Ghi";
 "Frequency" = "Tần số";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Lưu";
 "Run" = "Chạy";
 "Stop" = "Dừng";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Sử dụng CPU";
 "CPU temperature" = "Nhiệt độ CPU";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Tần số CPU";
 "System" = "Hệ thống";
 "User" = "Người dùng";

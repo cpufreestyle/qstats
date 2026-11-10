@@ -85,6 +85,7 @@
 "Read" = "Lecture"; // gemma4:31b
 "Write" = "Écriture"; // gemma4:31b
 "Frequency" = "Fréquence"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Enregistrer"; // translategemma:4b
 "Run" = "Exécuter"; // translategemma:4b
 "Stop" = "Arrêter";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Utilisation du CPU";
 "CPU temperature" = "Température du CPU";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Fréquence du CPU";
 "System" = "Système";
 "User" = "Utilisateur";

@@ -85,6 +85,7 @@
 "Read" = "Read";
 "Write" = "Write";
 "Frequency" = "Frequency";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Save";
 "Run" = "Run";
 "Stop" = "Stop";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU usage";
 "CPU temperature" = "CPU temperature";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU frequency";
 "System" = "System";
 "User" = "User";

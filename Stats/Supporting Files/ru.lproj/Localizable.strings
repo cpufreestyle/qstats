@@ -85,6 +85,7 @@
 "Read" = "Чтение";
 "Write" = "Запись";
 "Frequency" = "Частота";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Сохранить";
 "Run" = "Запустить";
 "Stop" = "Остановить";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Использование процессора";
 "CPU temperature" = "Температура процессора";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Частота процессора";
 "System" = "Система";
 "User" = "Пользователь";

@@ -85,6 +85,7 @@
 "Read" = "读取";
 "Write" = "写入";
 "Frequency" = "频率";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "保存";
 "Run" = "运行";
 "Stop" = "停止";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU占用";
 "CPU temperature" = "CPU温度";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU频率";
 "System" = "系统";
 "User" = "用户";

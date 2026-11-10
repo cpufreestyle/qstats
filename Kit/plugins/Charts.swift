@@ -1059,6 +1059,14 @@ public class PieChartView: ChartView {
         self.displayIfVisible()
     }
     
+    public func setColor(_ newColor: NSColor) {
+        self.write {
+            guard self.color != newColor else { return }
+            self.color = newColor
+        }
+        self.displayIfVisible()
+    }
+    
     public func setSegments(_ segments: [ColorValue]) {
         self.write { self.segments = segments }
         self.fadeOrDisplay()

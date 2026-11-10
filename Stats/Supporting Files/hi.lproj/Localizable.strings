@@ -85,6 +85,7 @@
 "Read" = "रीड"; // gemma4:31b
 "Write" = "लिखना"; // gemma4:31b
 "Frequency" = "आवृत्ति"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "सहेजें"; // gemma4:31b
 "Run" = "चलाएं"; // translategemma:4b
 "Stop" = "रोकें"; // gemma4:31b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "सीपीयू उपयोग";
 "CPU temperature" = "सीपीयू तापमान";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "सीपीयू आवृत्ति";
 "System" = "सिस्टम";
 "User" = "उपयोगकर्ता";

@@ -85,6 +85,7 @@
 "Read" = "Lesing"; // gemma4:31b
 "Write" = "Skriving"; // gemma4:31b
 "Frequency" = "Frekvens"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Lagre"; // translategemma:4b
 "Run" = "Kjør"; // translategemma:4b
 "Stop" = "Stopp"; // translategemma:4b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU-bruk";
 "CPU temperature" = "CPU-temperatur";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU-frekvens";
 "System" = "System";
 "User" = "Bruker";

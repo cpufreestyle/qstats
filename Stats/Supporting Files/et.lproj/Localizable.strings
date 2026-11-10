@@ -85,6 +85,7 @@
 "Read" = "Loe";
 "Write" = "Kirjuta";
 "Frequency" = "Sagedus";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Salvesta";
 "Run" = "Käivita";
 "Stop" = "Peata";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU kasutus";
 "CPU temperature" = "CPU temperatuur";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU sagedus";
 "System" = "Süsteem";
 "User" = "Kasutaja";

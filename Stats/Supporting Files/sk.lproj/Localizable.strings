@@ -85,6 +85,7 @@
 "Read" = "Čítanie"; // gemma4:31b
 "Write" = "Zápis"; // gemma4:31b
 "Frequency" = "Frekvencia"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Uložiť"; // translategemma:4b
 "Run" = "Spustiť"; // gemma4:31b
 "Stop" = "Zastaviť"; // gemma4:31b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Použitie CPU";
 "CPU temperature" = "Teplota CPU";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Frekvencia CPU";
 "System" = "Systém";
 "User" = "Používateľ";

@@ -85,6 +85,7 @@
 "Read" = "Čitanje"; // gemma4:31b
 "Write" = "Zapis"; // gemma4:31b
 "Frequency" = "Frekvencija"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Spremi"; // translategemma:4b
 "Run" = "Pokreni"; // gemma4:31b
 "Stop" = "Zaustavi"; // gemma4:31b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "Korištenje procesora";
 "CPU temperature" = "Temperatura procesora";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "Frekvencija procesora";
 "System" = "Sustav";
 "User" = "Korisnik";

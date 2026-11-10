@@ -35,6 +35,7 @@ public struct CPU_Frequency: Codable {
     var eCore: Double? = nil
     var pCore: Double? = nil
     var sCore: Double? = nil
+    var pCoreMax: Double? = nil
 }
 
 public struct CPU_Limit: Codable {
@@ -67,6 +68,7 @@ public class CPU: Module {
     private var frequencyReader: FrequencyReader? = nil
     private var limitReader: LimitReader? = nil
     private var averageLoadReader: AverageLoadReader? = nil
+    private var currentTotalUsage: Double = 0
     
     private var usagePerCoreState: Bool {
         Store.shared.bool(key: "\(self.config.name)_usagePerCore", defaultValue: false)
@@ -161,8 +163,7 @@ public class CPU: Module {
         }
         #else
         self.frequencyReader = FrequencyReader(.CPU) { [weak self] value in
-            self?.popupView.frequencyCallback(value)
-            self?.previewView.frequencyCallback(value)
+            self?.frequencyCallback(value)
         }
         #endif
         
@@ -194,9 +195,21 @@ public class CPU: Module {
         ])
     }
     
+    private func frequencyCallback(_ raw: CPU_Frequency?) {
+        guard let value = raw, self.enabled else { return }
+        self.popupView.frequencyCallback(value)
+        self.previewView.frequencyCallback(value)
+        if let pCore = value.pCore, let max = value.pCoreMax, max > 0 {
+            let utilization = pCore / max
+            let effective = self.currentTotalUsage > 0.7 ? utilization : 1.0
+            self.notificationsView.frequencyCallback(effective)
+        }
+    }
+    
     private func loadCallback(_ raw: CPU_Load?) {
         guard let value = raw, self.enabled else { return }
         
+        self.currentTotalUsage = value.totalUsage
         self.popupView.loadCallback(value)
         self.portalView.callback(value)
         self.notificationsView.loadCallback(value)

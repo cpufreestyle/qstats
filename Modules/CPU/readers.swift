@@ -415,7 +415,7 @@ public class FrequencyReader: Reader<CPU_Frequency> {
             }
             let value: Double? = activeCores > 0 ? totalFreq / activeCores : nil
             
-            self.callback(CPU_Frequency(value: value, eCore: eFreq, pCore: pFreq, sCore: sFreq))
+            self.callback(CPU_Frequency(value: value, eCore: eFreq, pCore: pFreq, sCore: sFreq, pCoreMax: Double(self.pCoreFreqs.max() ?? 0)))
             self.isReading = false
         }
     }

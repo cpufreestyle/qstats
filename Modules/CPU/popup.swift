@@ -93,6 +93,7 @@ internal class Popup: PopupWrapper {
     
     private var processes: ProcessesView? = nil
     private var maxFreq: Double = 0
+    private var totalUsage: Double = 0
     private var lineChartHistory: Int = 180
     private var lineChartScale: Scale = .none
     private var lineChartFixedScale: Double = 1
@@ -389,6 +390,7 @@ internal class Popup: PopupWrapper {
     }
     
     public func loadCallback(_ value: CPU_Load) {
+        self.totalUsage = value.totalUsage
         self.apply(value, to: self.loadCache, render: self.renderLoad)
         self.lineChart?.addValue(value.totalUsage)
     }
@@ -457,7 +459,7 @@ internal class Popup: PopupWrapper {
     }
     
     private func renderFrequency(_ value: CPU_Frequency) {
-        if !self.frequencyCache.initialized {
+        if self.coresFreqField == nil {
             self.insertArrangedSubview(self.initFrequency(), at: 4)
             self.recalculateHeight()
         }
@@ -475,6 +477,7 @@ internal class Popup: PopupWrapper {
                 circle.setValue((100*v)/self.maxFreq)
                 circle.setText("\((v/1000).rounded(toPlaces: 2))")
                 circle.toolTip = "\(localizedString("CPU frequency")): \(Int(v)) MHz - \(((100*v)/self.maxFreq).rounded(toPlaces: 2))%"
+                circle.setColor(self.frequencyColor(value))
                 circle.display()
             }
         }
@@ -488,6 +491,16 @@ internal class Popup: PopupWrapper {
         if let v = value.sCore {
             self.sCoresFreqField?.stringValue = "\(Int(v)) MHz"
         }
+    }
+    
+    private func frequencyColor(_ value: CPU_Frequency) -> NSColor {
+        guard let pCore = value.pCore, let max = value.pCoreMax, max > 0, self.totalUsage > 0.7 else {
+            return .systemBlue
+        }
+        let utilization = pCore / max
+        if utilization < 0.8 { return .systemRed }
+        if utilization < 0.9 { return .systemYellow }
+        return .systemBlue
     }
     
     public func processCallback(_ list: [TopProcess]?) {

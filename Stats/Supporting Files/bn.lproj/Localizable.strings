@@ -85,6 +85,7 @@
 "Read" = "পঠন";
 "Write" = "লিখন";
 "Frequency" = "ফ্রিকোয়েন্সি";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "সংরক্ষণ করুন";
 "Run" = "চালু করুন";
 "Stop" = "থামান";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU ব্যবহার";
 "CPU temperature" = "CPU তাপমাত্রা";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU ফ্রিকোয়েন্সি";
 "System" = "সিস্টেম";
 "User" = "ব্যবহারকারী";

@@ -85,6 +85,7 @@
 "Read" = "Okuma";
 "Write" = "Yazma";
 "Frequency" = "Frekans";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Kaydet";
 "Run" = "Çalıştır";
 "Stop" = "Durdur";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU kullanımı";
 "CPU temperature" = "CPU sıcaklığı";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU frekansı";
 "System" = "Sistem";
 "User" = "Kullanıcı";

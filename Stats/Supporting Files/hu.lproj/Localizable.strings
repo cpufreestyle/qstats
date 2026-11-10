@@ -85,6 +85,7 @@
 "Read" = "Olvasás"; // gemma4:31b
 "Write" = "Írás"; // gemma4:31b
 "Frequency" = "Frekvencia"; // gemma4:31b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Mentés"; // translategemma:4b
 "Run" = "Futtatás"; // gemma4:31b
 "Stop" = "Leállítás"; // gemma4:31b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU használat";
 "CPU temperature" = "CPU hőmérséklet";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU frekvencia";
 "System" = "Rendszer";
 "User" = "Felhasználó";

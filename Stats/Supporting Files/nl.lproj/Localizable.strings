@@ -85,6 +85,7 @@
 "Read" = "Lezen"; // gemma4:31b
 "Write" = "Schrijven"; // gemma4:31b
 "Frequency" = "Frequentie"; // translategemma:4b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "Opslaan"; // translategemma:4b
 "Run" = "Uitvoeren"; // translategemma:4b
 "Stop" = "Stoppen"; // translategemma:4b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU gebruik";
 "CPU temperature" = "CPU temperatuur";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU frequentie";
 "System" = "Systeem";
 "User" = "Gebruiker";

@@ -85,6 +85,7 @@
 "Read" = "படி";
 "Write" = "எழுது";
 "Frequency" = "அதிர்வெண்";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "சேமி";
 "Run" = "இயக்கு";
 "Stop" = "நிறுத்து";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "மையச் செயலக பயன்பாடு";
 "CPU temperature" = "மையச் செயலக வெப்பநிலை";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "மையச் செயலக அதிர்வெண்";
 "System" = "கணினி";
 "User" = "பயனர்";

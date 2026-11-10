@@ -85,6 +85,7 @@
 "Read" = "読み込み";
 "Write" = "書き込み";
 "Frequency" = "周波数"; // gemma4:31b
+"Frequency utilization" = "Frequency utilization";
 "Save" = "保存"; // translategemma:4b
 "Run" = "実行"; // gemma4:31b
 "Stop" = "停止"; // translategemma:4b
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU 使用率";
 "CPU temperature" = "CPU 温度";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU 周波数";
 "System" = "システム";
 "User" = "ユーザー";

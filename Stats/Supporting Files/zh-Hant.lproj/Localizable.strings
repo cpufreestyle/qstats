@@ -85,6 +85,7 @@
 "Read" = "讀取";
 "Write" = "寫入";
 "Frequency" = "頻率";
+"Frequency utilization" = "Frequency utilization";
 "Save" = "儲存";
 "Run" = "執行";
 "Stop" = "停止";
@@ -272,6 +273,7 @@
 // CPU
 "CPU usage" = "CPU使用量";
 "CPU temperature" = "CPU溫度";
+"CPU thermal throttling" = "CPU thermal throttling";
 "CPU frequency" = "CPU頻率";
 "System" = "系統";
 "User" = "使用者";
