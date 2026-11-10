@@ -156,7 +156,7 @@ internal class SensorsReader: Reader<Sensors_List> {
             
             var newValue = SMC.shared.getValue(sensors[i].key) ?? 0
             if sensors[i].type == .temperature && sensors[i].group == .CPU &&
-                (newValue < 10 || newValue > self.temperatureCeiling) {
+                (newValue < SensorsReader.brokenSensorLow || newValue > self.temperatureCeiling + SensorsReader.brokenSensorOffset) { // broken-sensor cutoff must stay above the filtering ceiling
                 newValue = sensors[i].value
             }
             sensors[i].value = newValue
@@ -328,6 +328,28 @@ internal class SensorsReader: Reader<Sensors_List> {
             list.append(Sensor(key: "Average System Total", name: "Average System Total", value: 0, group: .sensor, type: .power, platforms: Platform.all, isComputed: true))
         }
         
+        return self.filtered(list)
+    }
+    
+    public func unknownCallback() {
+        self.unknownSensorsState = Store.shared.bool(key: "Sensors_unknown", defaultValue: false)
+    }
+
+    internal static let temperatureCeilingBase: Double = 110
+    internal static let temperatureCeilingHigh: Double = 125
+    internal static let brokenSensorLow: Double = 10
+    internal static let brokenSensorOffset: Double = 10
+    internal static let temperatureHysteresis: Double = 5
+
+    // M4 and newer Apple Silicon report junction temperatures that legitimately
+    // exceed the historical 110 C cutoff, so those readings were being discarded
+    // and the sensor disappeared from the list until the app restarted.
+    internal static func ceiling(for platform: Platform?) -> Double {
+        guard let platform = platform, platform.generation >= 4 else { return temperatureCeilingBase }
+        return temperatureCeilingHigh
+    }
+
+    private func filtered(_ list: [Sensor_p]) -> [Sensor_p] {
         return list.filter({ (s: Sensor_p) -> Bool in
             switch s.type {
             case .temperature:
@@ -339,18 +361,6 @@ internal class SensorsReader: Reader<Sensors_List> {
             default: return true
             }
         }).sorted { $0.key.lowercased() < $1.key.lowercased() }
-    }
-    
-    public func unknownCallback() {
-        self.unknownSensorsState = Store.shared.bool(key: "Sensors_unknown", defaultValue: false)
-    }
-
-    // M4 and newer Apple Silicon report junction temperatures that legitimately
-    // exceed the historical 110 C cutoff, so those readings were being discarded
-    // and the sensor disappeared from the list until the app restarted.
-    internal static func ceiling(for platform: Platform?) -> Double {
-        guard let platform = platform, platform.generation >= 4 else { return 110 }
-        return 125
     }
 }
 
@@ -509,17 +519,7 @@ extension SensorsReader {
             }
         }
         
-        return list.filter({ (s: Sensor_p) -> Bool in
-            switch s.type {
-            case .temperature:
-                return s.value < self.temperatureCeiling && s.value >= 0
-            case .voltage:
-                return s.value < 300 && s.value >= 0
-            case .current:
-                return s.value < 100 && s.value >= 0
-            default: return true
-            }
-        }).sorted { $0.key.lowercased() < $1.key.lowercased() }
+        return self.filtered(list)
     }
     
     public func HIDCallback() {

@@ -83,7 +83,7 @@ class Notifications: NotificationsWrapper {
         for s in sensors {
             if let threshold = Double(s.notificationThreshold) {
                 let subtitle = localizedString("\(localizedString(s.name)): \(s.formattedPopupValue)")
-                self.checkDouble(id: s.key, value: s.value, threshold: threshold, title: title, subtitle: subtitle, hysteresis: s.type == .temperature ? 5 : 0)
+                self.checkDouble(id: s.key, value: s.value, threshold: threshold, title: title, subtitle: subtitle, hysteresis: s.type == .temperature ? SensorsReader.temperatureHysteresis : 0)
             }
         }
     }
